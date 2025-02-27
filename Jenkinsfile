@@ -31,15 +31,15 @@ pipeline {
                     bash -c "pip install requests && python /test_app.py"
                 """
             }
-    post {
-        always {
-            sh """
-            docker stop test-app || true
-            docker rm test-app || true
-            """
+        post {
+            always {
+                sh """
+                docker stop test-app || true
+                docker rm test-app || true
+                """
+            }
         }
     }
-}
         
         stage('Deploy') {
             steps {
