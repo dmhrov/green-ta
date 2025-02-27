@@ -6,7 +6,7 @@ import os
 class TestFlaskApp(unittest.TestCase):
     def test_health_endpoint(self):
         # Зачекати, поки сервер запуститься
-        time.sleep(5)
+        time.sleep(10)
         
         # Виконати запит до health endpoint
         host = os.environ.get('APP_HOST', 'localhost')
