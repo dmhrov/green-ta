@@ -9,7 +9,7 @@ class TestFlaskApp(unittest.TestCase):
         time.sleep(25)
         
         # Виконати запит до health endpoint
-        host = os.environ.get('APP_HOST', 'localhost')
+        host = os.environ.get('APP_HOST', '192.168.126.130')
         port = os.environ.get('APP_PORT', '5000')
         url = f"http://{host}:{port}/health"
         
