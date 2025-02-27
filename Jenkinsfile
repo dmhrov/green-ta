@@ -22,20 +22,24 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh """
-                docker run -d --name test-app -p 5000:5000 ${IMAGE_NAME}
-                sleep 25  # Wait for container to start
-                docker run --rm --network host -e APP_HOST=localhost -e APP_PORT=5000 \
+                docker network create test-network || true
+                docker run -d --name test-app --network test-network -p 5000:5000 ${IMAGE_NAME}
+                sleep 10
+        
+                docker run --rm --network test-network -e APP_HOST=test-app -e APP_PORT=5000 \
                     -v \$(pwd)/test_app.py:/test_app.py python:3.9-slim \
                     bash -c "pip install requests && python /test_app.py"
                 """
             }
-            post {
-                always {
-                    sh "docker stop test-app || true"
-                    sh "docker rm test-app || true"
-                }
-            }
+    post {
+        always {
+            sh """
+            docker stop test-app || true
+            docker rm test-app || true
+            """
         }
+    }
+}
         
         stage('Deploy') {
             steps {
